@@ -1,5 +1,7 @@
+// Modules import.
 const Joi = require("joi");
 const express = require("express");
+const schemaValidation = require("./schemaValidation");
 const app = express();
 
 // Allow the app to use express json input.
@@ -12,10 +14,12 @@ const courses = [
     { id: 3, name: "course3"},
 ];
 
+// Root api endpoint
 app.get('/', (req, res) => {
     res.send({"message": "hello nodemon"});
 });
 
+// Get courses request
 app.get('/api/courses', (req, res) => {
     res.send(courses);
 });
@@ -53,7 +57,7 @@ app.post('/api/courses_validate', (req, res) => {
     res.send(course);
 });
 
-
+// Put request
 app.put('/api/courses/:id', (req, res) => {
     //look for the course, if not exist, return 404.
     // const id = parseInt(req.params.id);
@@ -64,7 +68,7 @@ app.put('/api/courses/:id', (req, res) => {
     };
     
     // Validate if invalid, return 400 - bad request.
-    const { error } = inputSchemaValidation(req.body);
+    const { error } = schemaValidation.inputSchemaValidation(req.body);
     console.log(error);
 
     if (error) {
@@ -100,11 +104,11 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listen on port ${port} ....`));
 
 
-function inputSchemaValidation(courseName) {
-    const schema = Joi.object({
-        name: Joi.string().min(3).required()
-    });
+// function inputSchemaValidation(courseName) {
+//     const schema = Joi.object({
+//         name: Joi.string().min(3).required()
+//     });
 
-    return result = schema.validate(courseName);
-    // console.log(result);
-};
+//     return result = schema.validate(courseName);
+//     // console.log(result);
+// };
